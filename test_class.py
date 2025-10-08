@@ -93,7 +93,7 @@ class PRKNeighborsClassifier(ClassifierMixin, BaseEstimator, PRKNN_kwarg_handler
             # weights must be a callable 
             prediction_model_weights = self._return_proximal_ratios
         else: 
-            prediction_model_weights = self._pr_weights 
+            prediction_model_weights = self._predict_weights 
 
         self._prediction_knn_model = KNeighborsClassifier(
             **self._generate_kwargs_for_knn(
@@ -214,11 +214,10 @@ class PRKNeighborsClassifier(ClassifierMixin, BaseEstimator, PRKNN_kwarg_handler
         # assign label of class with max weight
         for query_index, query_weights in enumerate(ww):
      
-            # the classes of each nieghbor
+            # the classes of each neighbor
             query_classes = self.y_[indexes[query_index]]
 
-            # the unique classes 
-
+            # the unique classes, all set to a weight of 0.
             class_weights = np.zeros(fitted_classes.shape, dtype="float64")
 
             # TODO: compile
@@ -227,7 +226,8 @@ class PRKNeighborsClassifier(ClassifierMixin, BaseEstimator, PRKNN_kwarg_handler
                 # A if class is not present, set weight to 0.
                 class_mask = query_classes == clss
                 if not np.any(class_mask):
-                    class_weights[j] = 0
+                    # Class weight remain at defualt (0)
+                    continue
                 
                 elif version == "weighted":
                     # if using weighted prknn, weights at this point are just distances
@@ -257,6 +257,7 @@ class PRKNeighborsClassifier(ClassifierMixin, BaseEstimator, PRKNN_kwarg_handler
                     class_weights[j] = weight_1 + weight_2 + weight_3
                     
                 else:
+                    # weight of class in the mean of all neighbors of given class
                     class_weights[j] = np.mean(query_weights[class_mask])
             
             # print(class_weights, classes, fitted_classes[np.argmax(class_weights)]) 

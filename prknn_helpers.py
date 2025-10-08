@@ -80,6 +80,7 @@ def get_mean_euclidean_chunked(X: np.ndarray) -> float:
 
     return total_sum / total_size
 
+
 @numba.jit()
 def _predict_on_weights(
     ww,

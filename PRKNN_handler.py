@@ -29,6 +29,7 @@ class PRKNN_kwarg_handler():
         self.predict_knn_params = predict_knn_params
         self.pr_version = pr_version
 
+
     def _fit_params(self):
 
         # used in _generate_kwargs_for_knn()
@@ -156,12 +157,12 @@ if __name__ == "__main__":
         "predict_n_jobs": 8
     }
 
-    handler1 = PRKNN_kwarg_handler(base_knn_params=base_params, pr_knn_params=pr_params, predict_knn_params=predict_params)
+    handler1 = PRKNN_kwarg_handler(base_knn_params=base_params)
     handler1._fit_params()
 
     for key, value in vars(handler1).items():
         print(key, value)
 
-    print(handler1._generate_kwargs_for_knn("pr_", weights="FOO"))
+    # print(handler1._generate_kwargs_for_knn("pr_", weights="FOO"))
 
-    # testknn = KNeighborsClassifier(handler1._generate_kwargs_for_knn("pr_"))
+    print(handler1._generate_kwargs_for_knn("predict_"))

@@ -19,7 +19,7 @@ def generate_score_plot(scores: dict,
     for model, score in scores.items():
         offset = width * multiplier
         rects = ax.bar(x + offset,np.average(score, axis=1), width, label=model)
-        ax.bar_label(rects, padding=3,fmt="%.2f")
+        # ax.bar_label(rects, padding=3,fmt="%.2f")
         multiplier +=1
 
     ax.set_title(f"{dataset_name}")
