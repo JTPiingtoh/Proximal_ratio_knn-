@@ -1,12 +1,10 @@
-import numpy as np
-
 class PRKNN_kwarg_handler():
     '''
         Handles key word arguments for the PRKNN class. THe PRKNN effecitvely wraps 2 knn models implemented by scikit-learn;
         one for calculating proximal ratios (pr_knn), and one for predicting (predict_knn). This argument handeler allows the 
-        caller to set the kwargs of both models to be identical (the default) by setting pr-eq_predict to True, or to have different kwargs. 
-
-        Convention: the pr_knn is considered to be the default for kwarg setting for both models.    
+        caller to set the kwargs of both models to be identical (the default) by passing 'base_knn_params', or to have different kwargs
+        for each internal model. To make code as explicit as possible, both pr_knn_params and predict_knn_params must be passed 
+        when setting parameters for the internal models seperately.
     '''
 
     def __init__(
@@ -32,7 +30,7 @@ class PRKNN_kwarg_handler():
 
     def _fit_params(self):
 
-        # used in _generate_kwargs_for_knn()
+        # used in fit() method of PRKNNClassifier()
         self._knn_kwargs_list = [
             "n_neighbors",
             "weights",
@@ -104,12 +102,10 @@ class PRKNN_kwarg_handler():
             else:
                 setattr(self,"_" + key,value)
 
-            
-
         self._params_fitted = True
 
 
-    def _generate_kwargs_for_knn(self, knn_model_prefix:str, **kwargs):
+    def _generate_kwargs_for_internal_knn(self, knn_model_prefix:str, **kwargs):
 
         assert self._params_fitted
 

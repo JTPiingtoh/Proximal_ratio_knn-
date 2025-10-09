@@ -5,6 +5,8 @@ fooo.ipynb
 bad_practice
 notes.txt
 
+# swaps
+*.swaps
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]

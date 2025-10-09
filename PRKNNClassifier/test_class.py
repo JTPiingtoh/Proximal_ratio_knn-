@@ -12,8 +12,8 @@ from sklearn.neighbors import KNeighborsClassifier
 from scipy.spatial.distance import euclidean
 from scipy.spatial.distance import pdist
 
-from PRKNN_handler import PRKNN_kwarg_handler
-from prknn_helpers import get_mean_euclidean_chunked, _predict_on_weights
+from PRKNNClassifier.PRKNN_handler import PRKNN_kwarg_handler
+from PRKNNClassifier.prknn_helpers import get_mean_euclidean_chunked, _predict_on_weights
 
 from tqdm import tqdm
 
@@ -32,7 +32,6 @@ class PRKNeighborsClassifier(ClassifierMixin, BaseEstimator, PRKNN_kwarg_handler
         predict_knn_params: dict | None = None
 
     ):
-        # TODO: Need to seperate pr model and prediction model's kwargs somehow.
         super().__init__(
             pr_version=pr_version,
             base_knn_params = base_knn_params,
@@ -43,18 +42,13 @@ class PRKNeighborsClassifier(ClassifierMixin, BaseEstimator, PRKNN_kwarg_handler
         self.pr_version = pr_version
    
 
-    # These need to be set to bypass certain checks 
     def __sklearn_tags__(self):
         tags = super().__sklearn_tags__()
         tags.input_tags.sparse=False
         tags.target_tags.multi_output=False
-
-        # poor_score is defined as anything below 0.83. However, seems like a harsh metric when using for higher ordinality targets.
-        tags.classifier_tags.poor_score=False
         return tags
     
     
-    # fit knn model and calculate proximal ratio
     def fit(self, X, y):
         '''
         Computes the training set's proximal ratios, and fits the prediction model ready for prediciton.
@@ -96,14 +90,12 @@ class PRKNeighborsClassifier(ClassifierMixin, BaseEstimator, PRKNN_kwarg_handler
             prediction_model_weights = self._predict_weights 
 
         self._prediction_knn_model = KNeighborsClassifier(
-            **self._generate_kwargs_for_knn(
+            **self._generate_kwargs_for_internal_knn(
                 knn_model_prefix="predict_", 
                 weights=prediction_model_weights)
                 ).fit(X,y)
         
-
         self.is_fitted_ = True
-
 
         return self
 
