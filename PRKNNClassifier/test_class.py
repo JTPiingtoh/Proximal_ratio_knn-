@@ -77,7 +77,7 @@ class PRKNeighborsClassifier(ClassifierMixin, BaseEstimator, PRKNN_kwarg_handler
         self.y_ = y
         
         # fit pr_knn
-        self._pr_knn_model = KNeighborsClassifier(**self._generate_kwargs_for_knn("pr_")).fit(X,y)        
+        self._pr_knn_model = KNeighborsClassifier(**self._generate_kwargs_for_internal_knn("pr_")).fit(X,y)        
 
         self._class_radii = self._compute_class_radii()
         self._proximal_ratios = self._compute_proximal_ratios()
