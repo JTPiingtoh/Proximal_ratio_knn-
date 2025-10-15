@@ -192,27 +192,17 @@ class PRKNeighborsClassifier(ClassifierMixin, BaseEstimator, PRKNN_kwarg_handler
 
         fitted_classes = self.classes_
         n_neighbors = self._predict_n_neighbors
-        # y_pred = _predict_on_weights(
-        #     ww=ww,
-        #     y=self.y_,
-        #     indexes=indexes,
-        #     fitted_classes=fitted_classes,
-        #     n_neighbors=n_neighbors,
-        #     version=version,
-        #     y_pred=y_pred
-        # )
-
-        # TODO: implement in cpp
+        
+        # TODO: rewrite in np friendly form
         # assign label of class with max weight
         for query_index, query_weights in enumerate(ww):
      
             # the classes of each neighbor
-            query_classes = self.y_[indexes[query_index]]
+            query_classes = self.y_[indexes[query_index]] 
 
             # the unique classes, all set to a weight of 0.
             class_weights = np.zeros(fitted_classes.shape, dtype="float64")
 
-            # TODO: compile
             for j, clss in enumerate(fitted_classes): 
 
                 # A if class is not present, set weight to 0.
