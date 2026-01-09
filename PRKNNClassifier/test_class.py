@@ -2,7 +2,7 @@
 
 
 import numpy as np
-import numba
+
 from sklearn.base import BaseEstimator, ClassifierMixin
 from sklearn.neighbors._base import NeighborsBase
 from sklearn.utils.validation import validate_data, check_is_fitted, check_array, _num_samples, check_X_y
